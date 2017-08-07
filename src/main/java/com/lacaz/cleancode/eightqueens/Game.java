@@ -67,8 +67,8 @@ public class Game
 	{
 		int nextRowToCalculate = getNumberOfRowsDefined();
 
-		for (int column = 0; column < getGameDimension(); column++)
-		{
+		IntStream.range(0, getGameDimension()).forEach( column -> {
+
 			if (isPositionValid(nextRowToCalculate, column))
 			{
 				Game solutionGame = new Game(this);
@@ -80,7 +80,8 @@ public class Game
 
 				solutionGame.calculateNextRows();
 			}
-		}
+
+		});
 	}
 
 	private int getGameDimension()
