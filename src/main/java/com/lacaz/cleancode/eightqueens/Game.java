@@ -3,6 +3,7 @@ package com.lacaz.cleancode.eightqueens;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 
 public class Game
@@ -26,34 +27,28 @@ public class Game
 	{
 		int numberOfRowsDefined = getNumberOfRowsDefined();
 
-		for (int gameRow = 0; gameRow < numberOfRowsDefined; gameRow++)
-		{
+		long numberOfMatchingPositions = IntStream.range(0, numberOfRowsDefined)
+																.filter( gameRow -> isPositionValidForExistingGameRow(row, column, gameRow))
+																.count();
 
-			int gameColumn = queensPositionPerRow[gameRow];
-
-			if (isPositionOnSameRowOrColumn(row, column, gameRow, gameColumn))
-			{
-				return false;
-			}
-
-			if (isOnDiagonal(row, column, gameRow, gameColumn))
-			{
-				return false;
-			}
-
-		}
-
-		return true;
+		return numberOfMatchingPositions == 0;
 	}
 
-	private boolean isOnDiagonal(int row, int column, int gameRow, int gameColumn)
+	private boolean isPositionValidForExistingGameRow(int row, int column, int gameRow)
 	{
+		return isPositionOnSameRowOrColumn(row, column, gameRow) || isOnDiagonal(row, column, gameRow);
+	}
+
+	private boolean isOnDiagonal(int row, int column, int gameRow)
+	{
+		int gameColumn = queensPositionPerRow[gameRow];
 		int distance = row - gameRow;
 		return (column == (gameColumn + distance)) || (column == (gameColumn - distance));
 	}
 
-	private boolean isPositionOnSameRowOrColumn(int row, int column, int gameRow, int gameColumn)
+	private boolean isPositionOnSameRowOrColumn(int row, int column, int gameRow)
 	{
+		int gameColumn = queensPositionPerRow[gameRow];
 		if (row == gameRow || column == gameColumn)
 		{
 			return true;
@@ -65,6 +60,7 @@ public class Game
 	{
 		queensPositionPerRow[row] = column;
 	}
+
 
 
 	public boolean calculateNextRows()
