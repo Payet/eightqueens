@@ -19,8 +19,8 @@ public class Game
 
 	public Game(Game game2copy)
 	{
-			this.queensPositionPerRow = Arrays.copyOf(game2copy.queensPositionPerRow, game2copy.getGameDimension());
-			this.solutions = game2copy.getSolutions();
+		this.queensPositionPerRow = Arrays.copyOf(game2copy.queensPositionPerRow, game2copy.getGameDimension());
+		this.solutions = game2copy.getSolutions();
 	}
 
 	public boolean isPositionValid(int row, int column)
@@ -28,8 +28,7 @@ public class Game
 		int numberOfRowsDefined = getNumberOfRowsDefined();
 
 		long numberOfMatchingPositions = IntStream.range(0, numberOfRowsDefined)
-																.filter( gameRow -> isPositionValidForExistingGameRow(row, column, gameRow))
-																.count();
+				.filter(gameRow -> isPositionValidForExistingGameRow(row, column, gameRow)).count();
 
 		return numberOfMatchingPositions == 0;
 	}
@@ -61,27 +60,35 @@ public class Game
 		queensPositionPerRow[row] = column;
 	}
 
-
-
 	public void calculateNextRows()
 	{
 		int nextRowToCalculate = getNumberOfRowsDefined();
 
-		IntStream.range(0, getGameDimension()).forEach( column -> {
-
+		IntStream.range(0, getGameDimension()).forEach(column ->
+		{
 			if (isPositionValid(nextRowToCalculate, column))
 			{
-				Game solutionGame = new Game(this);
-				solutionGame.setQueenPositionForRow(nextRowToCalculate, column);
-				if (solutionGame.getNumberOfRowsDefined() == getGameDimension())
-				{
-					solutions.add(solutionGame.queensPositionPerRow);
-				}
+				Game solutionGame = getGameWithNewPosition(nextRowToCalculate, column);
 
 				solutionGame.calculateNextRows();
 			}
-
 		});
+	}
+
+	private Game getGameWithNewPosition(int nextRowToCalculate, int column)
+	{
+		Game solutionGame = new Game(this);
+		solutionGame.setQueenPositionForRow(nextRowToCalculate, column);
+		if (isGameComplete(solutionGame))
+		{
+			solutions.add(solutionGame.queensPositionPerRow);
+		}
+		return solutionGame;
+	}
+
+	private boolean isGameComplete(Game solutionGame)
+	{
+		return solutionGame.getNumberOfRowsDefined() == getGameDimension();
 	}
 
 	private int getGameDimension()
@@ -91,9 +98,7 @@ public class Game
 
 	private int getNumberOfRowsDefined()
 	{
-		return Long.valueOf(Arrays.stream(queensPositionPerRow)
-				.filter(row -> row != null)
-				.count()).intValue();
+		return Long.valueOf(Arrays.stream(queensPositionPerRow).filter(row -> row != null).count()).intValue();
 	}
 
 	public List<Integer[]> getSolutions()
@@ -101,28 +106,4 @@ public class Game
 		return solutions;
 	}
 
-	public void displaySolutions()
-	{
-		for (Integer[] solution : solutions)
-		{
-
-			System.out.println("--- Solution: ---");
-			for (Integer col : solution)
-			{
-				for (int i = 0; i < getGameDimension(); i++)
-				{
-					if (col == i)
-					{
-						System.out.print(" X ");
-					}
-					else
-					{
-						System.out.print(" * ");
-					}
-				}
-				System.out.println("");
-			}
-
-		}
-	}
 }
