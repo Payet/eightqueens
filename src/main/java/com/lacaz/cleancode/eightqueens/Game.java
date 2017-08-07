@@ -19,7 +19,7 @@ public class Game
 
 	public Game(Game game2copy)
 	{
-			this.queensPositionPerRow = Arrays.copyOf(game2copy.queensPositionPerRow, game2copy.queensPositionPerRow.length);
+			this.queensPositionPerRow = Arrays.copyOf(game2copy.queensPositionPerRow, game2copy.getGameDimension());
 			this.solutions = game2copy.getSolutions();
 	}
 
@@ -63,30 +63,29 @@ public class Game
 
 
 
-	public boolean calculateNextRows()
+	public void calculateNextRows()
 	{
 		int nextRowToCalculate = getNumberOfRowsDefined();
 
-		for (int column = 0; column < queensPositionPerRow.length; column++)
+		for (int column = 0; column < getGameDimension(); column++)
 		{
 			if (isPositionValid(nextRowToCalculate, column))
 			{
 				Game solutionGame = new Game(this);
 				solutionGame.setQueenPositionForRow(nextRowToCalculate, column);
-				if (solutionGame.getNumberOfRowsDefined() == queensPositionPerRow.length)
+				if (solutionGame.getNumberOfRowsDefined() == getGameDimension())
 				{
 					solutions.add(solutionGame.queensPositionPerRow);
-					return true;
 				}
 
-				if (!solutionGame.calculateNextRows())
-				{
-					solutionGame.setQueenPositionForRow(nextRowToCalculate, null);
-				}
+				solutionGame.calculateNextRows();
 			}
 		}
+	}
 
-		return false;
+	private int getGameDimension()
+	{
+		return queensPositionPerRow.length;
 	}
 
 	private int getNumberOfRowsDefined()
@@ -109,7 +108,7 @@ public class Game
 			System.out.println("--- Solution: ---");
 			for (Integer col : solution)
 			{
-				for (int i = 0; i < queensPositionPerRow.length; i++)
+				for (int i = 0; i < getGameDimension(); i++)
 				{
 					if (col == i)
 					{

@@ -83,38 +83,6 @@ public class GameTest
 	}
 
 	@Test
-	public void calculateNextRow_shouldReturnFalse_whenNoSolutionExist() throws Exception
-	{
-		game.setQueenPositionForRow(0, 0);
-		game.setQueenPositionForRow(1, 1);
-		game.setQueenPositionForRow(2, 2);
-		game.setQueenPositionForRow(3, 3);
-		game.setQueenPositionForRow(4, 4);
-		game.setQueenPositionForRow(5, 5);
-		game.setQueenPositionForRow(6, 6);
-
-		boolean result = game.calculateNextRows();
-
-		Assert.assertThat(result, is(equalTo(false)));
-	}
-
-	@Test
-	public void calculateNextRow_shouldReturnTrue_whenASolutionExist() throws Exception
-	{
-		game.setQueenPositionForRow(0, 5);
-		game.setQueenPositionForRow(1, 3);
-		game.setQueenPositionForRow(2, 6);
-		game.setQueenPositionForRow(3, 0);
-		game.setQueenPositionForRow(4, 7);
-		game.setQueenPositionForRow(5, 1);
-		game.setQueenPositionForRow(6, 4);
-
-		boolean result = game.calculateNextRows();
-
-		Assert.assertThat(result, is(equalTo(true)));
-	}
-
-	@Test
 	public void calculateNextRow_shouldSet92Solutions_whenANewGameOf8DimensionIsSet() throws Exception
 	{
 		game.calculateNextRows();
