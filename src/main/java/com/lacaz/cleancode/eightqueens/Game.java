@@ -77,7 +77,7 @@ public class Game
 			{
 				Game solutionGame = new Game(this);
 				solutionGame.setQueenPositionForRow(nextRowToCalculate, column);
-				if (solutionGame.getNumberOfRowsDefined() == -1)
+				if (solutionGame.getNumberOfRowsDefined() == queensPositionPerRow.length)
 				{
 					solutions.add(solutionGame.queensPositionPerRow);
 					return true;
@@ -95,16 +95,9 @@ public class Game
 
 	private int getNumberOfRowsDefined()
 	{
-		int nextRowToCalculate = -1;
-		for (int row = 0; row < queensPositionPerRow.length; row++)
-		{
-			if (queensPositionPerRow[row] == null)
-			{
-				nextRowToCalculate = row;
-				break;
-			}
-		}
-		return nextRowToCalculate;
+		return Long.valueOf(Arrays.stream(queensPositionPerRow)
+				.filter(row -> row != null)
+				.count()).intValue();
 	}
 
 	public List<Integer[]> getSolutions()
